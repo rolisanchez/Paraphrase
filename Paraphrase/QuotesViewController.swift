@@ -125,33 +125,42 @@ class QuotesViewController: UITableViewController {
         selectedRow = nil
     }
 
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { [unowned self] (action, indexPath) in
+//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        let contextItem = UIContextualAction(style: .destructive, title: deleteActionTitle) {  (contextualAction, view, boolValue) in
+//            //Code I want to do here
+//        }
+//        let swipeActions = UISwipeActionsConfiguration(actions: [contextItem])
+//
+//        return swipeActions
+//    }
+    
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (contextualAction, view, boolValue) in
             SwiftyBeaver.info("Deleting quote at index \(indexPath.row)")
             self.quotes.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
             self.saveQuotes()
         }
-
-        let edit = UITableViewRowAction(style: .normal, title: "Edit") { [unowned self] (action, indexPath) in
+        
+        let editAction = UIContextualAction(style: .destructive, title: "Edit") { (contextualAction, view, boolValue) in
             let quote = self.quotes[indexPath.row]
             self.selectedRow = indexPath.row
-
+            
             guard let editQuote = self.storyboard?.instantiateViewController(withIdentifier: "EditQuoteViewController") as? EditQuoteViewController else {
                 SwiftyBeaver.error("Unable to load EditQuoteViewController")
                 fatalError("Unable to load EditQuoteViewController")
             }
-
+            
             editQuote.quotesViewController = self
             editQuote.editingQuote = quote
             self.navigationController?.pushViewController(editQuote, animated: true)
         }
-
-        edit.backgroundColor = UIColor(red: 0, green: 0.4, blue: 0.6, alpha: 1)
-
-        return [delete, edit]
+        editAction.backgroundColor = UIColor(red: 0, green: 0.4, blue: 0.6, alpha: 1)
+        let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+        
+        return swipeActions
     }
-
+    
     func saveQuotes() {
         let defaults = UserDefaults.standard
         let encoder = JSONEncoder()

@@ -75,7 +75,13 @@ open class BaseDestination: Hashable, Equatable {
     let startDate = Date()
 
     // each destination class must have an own hashValue Int
+    #if swift(>=4.2)
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(defaultHashValue)
+    }
+    #else
     lazy public var hashValue: Int = self.defaultHashValue
+    #endif
     open var defaultHashValue: Int {return 0}
 
     // each destination instance must have an own serial queue to ensure serial output
@@ -335,7 +341,7 @@ open class BaseDestination: Hashable, Equatable {
 
     /// Remove a filter from the list of filters
     public func removeFilter(_ filter: FilterType) {
-        let index = filters.index {
+        let index = filters.firstIndex {
             return ObjectIdentifier($0) == ObjectIdentifier(filter)
         }
 
