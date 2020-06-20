@@ -179,6 +179,7 @@
 				51C94DEE209DACDB00298E4F /* Frameworks */,
 				51C94DEF209DACDB00298E4F /* Resources */,
 				CCEE2760BB112A80D571345F /* [CP] Embed Pods Frameworks */,
+				DB838B79249E49270077D691 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -329,6 +330,23 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Paraphrase/Pods-Paraphrase-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		DB838B79249E49270077D691 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

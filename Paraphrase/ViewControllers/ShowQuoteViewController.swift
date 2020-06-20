@@ -12,7 +12,7 @@ import SwiftyBeaver
 class ShowQuoteViewController: UIViewController {
     @IBOutlet var quoteLabel: UILabel!
 
-    var quote : Quote?
+    var quote: Quote?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +24,8 @@ class ShowQuoteViewController: UIViewController {
 
         title = quote.author
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareQuote))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action,
+                                            target: self, action: #selector(shareQuote))
 
         // format the text and author of this quote
         quoteLabel.attributedText = quote.attributedString

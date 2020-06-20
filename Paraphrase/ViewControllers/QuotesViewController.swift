@@ -14,7 +14,7 @@ class QuotesViewController: UITableViewController {
     var model = QuotesModel()
 
     // whichever row was selected; used when adjusting the data source after editing
-    var selectedRow : Int?
+    var selectedRow: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,9 +22,10 @@ class QuotesViewController: UITableViewController {
         title = "Paraphrase"
         navigationController?.navigationBar.prefersLargeTitles = true
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addQuote))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Random", style: .plain, target: self, action: #selector(showRandomQuote))
-        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add,
+                                                           target: self, action: #selector(addQuote))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Random", style: .plain,
+                                                            target: self, action: #selector(showRandomQuote))
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -43,7 +44,8 @@ class QuotesViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // show the quote fullscreen
-        guard let showQuote = storyboard?.instantiateViewController(withIdentifier: "ShowQuoteViewController") as? ShowQuoteViewController else {
+        guard let showQuote = storyboard?.instantiateViewController(withIdentifier: "ShowQuoteViewController")
+            as? ShowQuoteViewController else {
             SwiftyBeaver.error("Unable to load ShowQuoteViewController")
             fatalError("Unable to load ShowQuoteViewController")
         }
@@ -61,7 +63,8 @@ class QuotesViewController: UITableViewController {
         selectedRow = model.count - 1
 
         // now trigger editing that quote
-        guard let editQuote = storyboard?.instantiateViewController(withIdentifier: "EditQuoteViewController") as? EditQuoteViewController else {
+        guard let editQuote = storyboard?.instantiateViewController(withIdentifier: "EditQuoteViewController")
+            as? EditQuoteViewController else {
             SwiftyBeaver.error("Unable to load EditQuoteViewController")
             fatalError("Unable to load EditQuoteViewController")
         }
@@ -74,7 +77,8 @@ class QuotesViewController: UITableViewController {
     @objc func showRandomQuote() {
         guard let selectedQuote = model.random() else { return }
 
-        guard let showQuote = storyboard?.instantiateViewController(withIdentifier: "ShowQuoteViewController") as? ShowQuoteViewController else {
+        guard let showQuote = storyboard?.instantiateViewController(withIdentifier: "ShowQuoteViewController")
+            as? ShowQuoteViewController else {
             SwiftyBeaver.error("Unable to load ShowQuoteViewController")
             fatalError("Unable to load ShowQuoteViewController")
         }
@@ -92,32 +96,34 @@ class QuotesViewController: UITableViewController {
         tableView.reloadData()
         selectedRow = nil
     }
-    
-    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (contextualAction, view, boolValue) in
+
+    override func tableView(_ tableView: UITableView,
+                            trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
+                            -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] (_, _, _) in
             SwiftyBeaver.info("Deleting quote at index \(indexPath.row)")
             self.model.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
         }
-        
-        let editAction = UIContextualAction(style: .destructive, title: "Edit") { (contextualAction, view, boolValue) in
+
+        let editAction = UIContextualAction(style: .destructive, title: "Edit") { [unowned self] (_, _, _) in
             let quote = self.model.quote(at: indexPath.row)
             self.selectedRow = indexPath.row
-            
-            guard let editQuote = self.storyboard?.instantiateViewController(withIdentifier: "EditQuoteViewController") as? EditQuoteViewController else {
+
+            guard let editQuote = self.storyboard?.instantiateViewController(withIdentifier: "EditQuoteViewController")
+                as? EditQuoteViewController else {
                 SwiftyBeaver.error("Unable to load EditQuoteViewController")
                 fatalError("Unable to load EditQuoteViewController")
             }
-            
+
             editQuote.quotesViewController = self
             editQuote.editingQuote = quote
             self.navigationController?.pushViewController(editQuote, animated: true)
         }
         editAction.backgroundColor = UIColor(red: 0, green: 0.4, blue: 0.6, alpha: 1)
         let swipeActions = UISwipeActionsConfiguration(actions: [deleteAction, editAction])
-        
+
         return swipeActions
     }
-    
-}
 
+}
